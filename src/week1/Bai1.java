@@ -1,5 +1,6 @@
 package week1;
-//Example 1: HelloWorld.ja
+//ChuVietAnh20214983
+
 public class Bai1{
 	public static void main(String[] args) {
 		System.out.println("Xin chao \n cac ban!");
