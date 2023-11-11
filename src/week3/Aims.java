@@ -25,8 +25,8 @@ public class Aims {
         dvdList[3] = dvd4;
 
         anOrder.addDigitalVideoDisc(dvdList);
-        anOrder.printCart();
-        anOrder.searchCart("T");
+//        anOrder.printCart();
+        anOrder.searchCart("M");
         anOrder.searchCart(1);
         
     }
