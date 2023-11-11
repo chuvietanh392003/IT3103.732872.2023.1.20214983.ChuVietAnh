@@ -26,5 +26,8 @@ public class Aims {
 
         anOrder.addDigitalVideoDisc(dvdList);
         anOrder.printCart();
+        anOrder.searchCart("T");
+        anOrder.searchCart(1);
+        
     }
 }

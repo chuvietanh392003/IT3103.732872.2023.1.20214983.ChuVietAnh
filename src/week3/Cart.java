@@ -114,4 +114,31 @@ public class Cart {
         System.out.println("Total cost: " + totalCost());
         System.out.println("***************************************************");
     }
+    public void searchCart(int id){
+    	int check = 0; // kiem tra xem dvd co trong cart hay ko
+    	for(int i = 0; i < numberOfItems; i++) {
+    		if(itemsOrdered[i].isMatch(id)) {
+    			check = 1;
+    			System.out.println(itemsOrdered[i].toString());
+    			break;
+    		}
+    	}
+    	if(check == 0) {
+    		System.out.println("khong tim thay!");
+    	}
+    }
+    public void searchCart(String title){
+    	int check = 0; // kiem tra xem dvd co trong cart hay ko
+    	for(int i = 0; i < numberOfItems; i++) {
+    		if(itemsOrdered[i].isMatch(title)) {
+    			check = 1;
+    			System.out.println(itemsOrdered[i].toString());
+    			break;
+    		}
+    	}
+    	if(check == 0) {
+    		System.out.println("khong tim thay!");
+    	}
+    }
+    
 }
