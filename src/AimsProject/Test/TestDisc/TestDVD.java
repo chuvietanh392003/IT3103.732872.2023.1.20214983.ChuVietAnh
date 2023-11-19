@@ -3,7 +3,7 @@
  */
 package TestDisc;
 
-import Disc.DigitalVideoDisc;
+import Media.DigitalVideoDisc;
 
 public class TestDVD {
     public static void main(String[] args) {
