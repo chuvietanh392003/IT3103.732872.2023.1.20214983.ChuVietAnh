@@ -22,13 +22,13 @@ public class StoreTest {
         store.addMedia(media3);
 
         // Display the current state of the store
-        store.displayStore();
+        store.print();
 
         // Remove media from the store
         store.removeMedia(media2);
 
         // Display the updated store
-        store.displayStore();
+        store.print();
      
     }
 }

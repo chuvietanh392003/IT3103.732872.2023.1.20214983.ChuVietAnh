@@ -39,12 +39,26 @@ public class Store {
             System.out.println("Media not found in the store: " + media.getTitle());
         }
     }
-
-    public void displayStore() {
+    
+    public void print() {
         System.out.println("********** STORE **********");
         for (int i = 0; i < itemsInStore.size(); i++) {
             System.out.println((i + 1) + ". " + itemsInStore.get(i).toString());
         }
         System.out.println("***************************");
     }
+    
+    public Media searchMedia(String title) {
+        for (Media media : itemsInStore) {
+            if (media.getTitle().equals(title)) {
+                System.out.println("Media found in the store: " + media.toString());
+                return media;
+            }
+        }
+
+        System.out.println("Media not found in the store with title: " + title);
+        return null;
+    }
+    
+    
 }
