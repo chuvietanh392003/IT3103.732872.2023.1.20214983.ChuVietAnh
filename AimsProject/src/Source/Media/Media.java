@@ -12,9 +12,30 @@ public abstract class Media {
     public Media() {
 
     }
-   
+    
+    public Media(String title){
+    	super();
+    	this.title = title;
+    }
+    
+    public Media(String title, String category, float cost) {
+		super();
+		this.title = title;
+		this.category = category;
+		this.cost = cost;
+	}
+    
+    
 
-    /**
+	public Media(int id, String title, String category, float cost) {
+		super();
+		this.id = id;
+		this.title = title;
+		this.category = category;
+		this.cost = cost;
+	}
+
+	/**
      * Phương thức kiểm tra 
      *
      * @param media

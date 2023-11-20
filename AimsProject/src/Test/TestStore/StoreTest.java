@@ -12,10 +12,10 @@ public class StoreTest {
         Store store = new Store();
 
         // Create some media to add to the store
-        Media media1 = new DigitalVideoDisc("Inception", "Sci-Fi", "Christopher Nolan", 148, 19.99f);
-        Media media2 = new DigitalVideoDisc("The Shawshank Redemption", "Drama", "Frank Darabont", 142, 15.99f);
-        Media media3 = new DigitalVideoDisc("The Dark Knight", "Action", "Christopher Nolan", 152, 22.99f);
-
+        Media media1 = new DigitalVideoDisc("Inception", "Sci-Fi", 19.99f, "Christopher Nolan", 148);
+        Media media2 = new DigitalVideoDisc("The Shawshank Redemption", "Drama", 15.99f, "Frank Darabont", 142);
+        Media media3 = new DigitalVideoDisc("The Dark Knight", "Action", 22.99f, "Christopher Nolan", 152);
+    
         // Add media to the store
         store.addMedia(media1);
         store.addMedia(media2);
