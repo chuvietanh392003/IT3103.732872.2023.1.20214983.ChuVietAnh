@@ -6,10 +6,10 @@ package Media;
 import java.util.Comparator;
 
 public class MediaComparatorByCostTitle implements Comparator<Media> {
-   
-    public int compare(Media media1, Media media2) {
-        return Comparator.comparing(Media::getCost)
-                .thenComparing(Media::getTitle)
-                .compare(media1, media2);
-    }
+
+	@Override
+	public int compare(Media o1, Media o2) {
+		return Float.floatToIntBits(o2.getCost()) - Float.floatToIntBits(o1.getCost());
+	}
+
 }

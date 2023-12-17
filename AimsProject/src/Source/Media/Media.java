@@ -4,105 +4,78 @@
 package Media;
 
 import java.util.Comparator;
+import java.util.Objects;
 
 public abstract class Media {
-    private int id;
-    private String title;
-    private String category;
-    private float cost;
-    
-    
 
-    public Media() {
+	public static final Comparator<Media> COMPARE_BY_TITLE_COST = new MediaComparatorByTitleCost()
+			.thenComparing(new MediaComparatorByTitleCost());
+	public static final Comparator<Media> COMPARE_BY_COST_TITLE = new MediaComparatorByCostTitle()
+			.thenComparing(new MediaComparatorByCostTitle());
 
-    }
-    
-    public Media(String title){
-    	super();
-    	this.title = title;
-    }
-    
-    public Media(String title, String category, float cost) {
+	private static int nbMedia = 0;
+	protected int id;
+	protected String title;
+	protected String category;
+	protected float cost;
+
+	public Media() {
 		super();
+		this.id = ++nbMedia;
+	}
+
+	public Media(String title) {
+		this();
 		this.title = title;
+	}
+
+	public Media(String title, String category, float cost) {
+		this(title);
 		this.category = category;
 		this.cost = cost;
 	}
-    
-    
 
-	public Media(int id, String title, String category, float cost) {
-		super();
-		this.id = id;
+	public boolean isMatch(String title) {
+		String[] keywords = title.split("\\s+");
+		for (String word : keywords) {
+			if (this.title.toLowerCase().contains(word.toLowerCase()))
+				return true;
+		}
+		return false;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
 		this.title = title;
-		this.category = category;
-		this.cost = cost;
 	}
-	
-	
-	public static final Comparator<Media> COMPARE_BY_TITLE_COST = new MediaComparatorByTitleCost();
-    public static final Comparator<Media> COMPARE_BY_COST_TITLE = new MediaComparatorByCostTitle();
-	
 
-	/**
-     * Phương thức kiểm tra 
-     *
-     * @param media
-     * @return
-     */
-    
-    public boolean equals(Object obj) {
-        if (!(obj instanceof Media))
-            return false;
-        return this.id == ((Media) obj).id;
-    }	
-
-	public boolean isMatch(int id) {
-        return this.id == id;
-    }
-
-    public boolean isMatch(String title) {
-        String[] tmp = title.split(" ", 0);
-        for (String x : tmp) {
-            if (getTitle().toLowerCase().contains(x.toLowerCase()))
-                return true;
-        }
-        return false;
-    }
-    
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getCategory() {
-        return category;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
-    }
-
-    public float getCost() {
-        return cost;
-    }
-
-    public void setCost(float cost) {
-        this.cost = cost;
-    }
-
-	public void printDetail() {
-		System.out.printf("%s - %s: %f $\n", this.getTitle(), this.getCategory(), this.getCost());
+	public String getCategory() {
+		return category;
 	}
+
+	public float getCost() {
+		return cost;
+	}
+
+	abstract public String getDetails();
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Media other = (Media) obj;
+		return Objects.equals(title, other.title);
+	}
+
 }

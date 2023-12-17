@@ -7,58 +7,48 @@ import Media.Media;
 
 import java.util.ArrayList;
 
+import Exception.DuplicatedItemException;
+
 public class Store {
-    private ArrayList<Media> itemsInStore;
-    private int maxSize = 2 ; //số lượng tối đa của cửa hàng 
 
-    public Store() {
-        itemsInStore = new ArrayList<>(maxSize);
-    }
+	private ArrayList<Media> itemsInStore = new ArrayList<Media>();
 
-    public void addMedia(Media media) {
-        if (itemsInStore.size() < maxSize) {
-            itemsInStore.add(media);
-            System.out.println("Thêm thành công: " + media.getTitle());
-        } else {
-            System.out.println("Store is full!");
-        }
-    }
+	public void addMedia(Media media) throws DuplicatedItemException {
+		if (itemsInStore.contains(media)) {
+			throw new DuplicatedItemException("ERROR: Item already exists.");
+		} else {
+			itemsInStore.add(0, media);
+			System.out.println("Added " + media.toString() + " to store.");
+		}
+	}
 
-    public void removeMedia(Media media) {
-        boolean check = false; // biến check để kiểm tra Media có trong store hay không
-        for (int i = 0; i < itemsInStore.size(); i++) {
-            if (itemsInStore.get(i).equals(media)) {
-                check = true;
-                itemsInStore.remove(i);
-                System.out.println("Media removed from the store: " + media.getTitle());
-                break;
-            }
-        }
+	public void removeMedia(Media media) {
+		if (itemsInStore.remove(media)) {
+			System.out.println("Removed " + media.toString() + " from store.");
+		} else {
+			System.out.println("Couldn't find this item.");
+		}
+	}
+	
+	public void displayItems() {
+		System.out.println("\n***********************STORE***********************");
+		for (Media m: itemsInStore) {
+			System.out.println(m.toString());
+		}
+		System.out.println("***************************************************");
+	}
+	
+	
+	public Media fetchMedia(String title) {
+		for (Media m : itemsInStore) {
+			if (m.isMatch(title))
+				return m;
+		}
+		return null;
+	}
 
-        if (!check) {
-            System.out.println("Media not found in the store: " + media.getTitle());
-        }
-    }
-    
-    public void print() {
-        System.out.println("********** STORE **********");
-        for (int i = 0; i < itemsInStore.size(); i++) {
-            System.out.println((i + 1) + ". " + itemsInStore.get(i).toString());
-        }
-        System.out.println("***************************");
-    }
-    
-    public Media searchMedia(String title) {
-        for (Media media : itemsInStore) {
-            if (media.getTitle().equals(title)) {
-                System.out.println("Media found in the store: " + media.toString());
-                return media;
-            }
-        }
+	public ArrayList<Media> getItemsInStore() {
+		return itemsInStore;
+	}
 
-        System.out.println("Media not found in the store with title: " + title);
-        return null;
-    }
-    
-    
 }

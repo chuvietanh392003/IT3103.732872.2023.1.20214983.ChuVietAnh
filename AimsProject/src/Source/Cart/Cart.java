@@ -6,122 +6,104 @@ package Cart;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import javax.naming.LimitExceededException;
+
+import Exception.DuplicatedItemException;
 import Media.Media;
 import Media.MediaComparatorByCostTitle;
 import Media.MediaComparatorByTitleCost;
-
-
-
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 public class Cart {
-    public static final int MAX_NUMBER_ORDERED = 20;
-    private ArrayList<Media> itemsOrdered = new ArrayList<Media>();
-    private static int nextId = 1; // nextId -> id media
 
-    public boolean addMedia(Media media) {
-        if (itemsOrdered.size() >= MAX_NUMBER_ORDERED) {
-            System.out.println("Không thể thêm nữa, giỏ hàng đã đầy!");
-            return false;
-        }
+	public static final int MAX_NUMBERS_ORDERED = 20;
 
-        if (itemsOrdered.contains(media)) {
-            System.out.println("Không thể thêm vì " + media.getTitle() + " đã có trong giỏ hàng!");
-            return false;
-        }
+	private ObservableList<Media> itemsOrdered = FXCollections.observableArrayList();
 
-        media.setId(nextId++);
-        itemsOrdered.add(media);
-        System.out.println("Thêm thành công: " + media.getTitle() + " (ID: " + media.getId() + ")");
-        return true;
-    }
-
-    public boolean addMedia(Media... mediaList) {
-        for (Media media : mediaList) {
-            addMedia(media);
-        }
-        return true;
-    }
-
-    public void removeMedia(Media media) {
-        if (itemsOrdered.isEmpty()) {
-            System.out.println("Giỏ hàng trống!");
-            return;
-        }
-
-        if (itemsOrdered.contains(media)) {
-            itemsOrdered.remove(media);
-            System.out.println("Xóa thành công");
-        } else {
-            System.out.println("Không thể xóa vì media không có trong giỏ hàng");
-        }
-    }
-
-    public float totalCost() {
-        float totalCost = 0f;
-        for (Media media : itemsOrdered) {
-            totalCost += media.getCost();
-        }
-        return totalCost;
-    }
-    
-    public void displayCart() {
-		if(itemsOrdered.size()!=0) {
-			int i = 0;
-			for(Media x: itemsOrdered) {
-				System.out.printf("%d. ", ++i);
-				x.printDetail();
-			}
+	public void addMedia(Media media) throws LimitExceededException, DuplicatedItemException {
+		if (itemsOrdered.size() == MAX_NUMBERS_ORDERED) {
+			throw new LimitExceededException("ERROR: The number of media has reached its limit.");
 		}
-		else {
-			System.out.println("Cart is empty!");
+
+		if (itemsOrdered.contains(media)) {
+			throw new DuplicatedItemException("ERROR: Item already in cart.");
 		}
 		
-		System.out.println("Total cost: " + totalCost() + "\n\n");
+		itemsOrdered.add(media);
 	}
 
-    public void printCart() {
-        System.out.println("***********************CART***********************");
+	public void removeMedia(Media media) {
+		if (itemsOrdered.remove(media)) {
+			System.out.println("Removed " + media.toString() + " from cart.");
+		} else {
+			System.out.println("Couldn't find this item.");
+		}
+	}
 
-        if (!itemsOrdered.isEmpty()) {
-            for (int i = 0; i < itemsOrdered.size(); ++i) {
-                System.out.println((i + 1) + ". " + itemsOrdered.get(i).toString());
-            }
-        } else {
-            System.out.println("Cart is empty! Please add media to Cart!");
-        }
+	public float totalCost() {
+		float cost = 0;
+		for (Media m : itemsOrdered) {
+			cost += m.getCost();
+		}
+		return cost;
+	}
 
-        System.out.println("Total cost: " + totalCost());
-        System.out.println("***************************************************");
-    }
+	public void print() {
+		System.out.println("\n***********************CART***********************");
+		System.out.println("Ordered Items:");
+		for (int i = 0; i < itemsOrdered.size(); i++) {
+			System.out.println((i + 1) + ". " + itemsOrdered.get(i).toString());
+		}
+		System.out.println("Total cost: " + totalCost() + " $");
+		System.out.println("**************************************************");
+	}
 
-    public Media searchCart(int id) {
-        for (Media media : itemsOrdered) {
-            if (media.isMatch(id)) {
-                return media;
-            }
-        }
-        System.out.println("Không tìm thấy!");
-        return null; // Trả về null nếu không tìm thấy
-    }
+	public void searchById(int id) {
+		System.out.println("Search results for ID: " + id);
+		for (Media m : itemsOrdered) {
+			if (m.getId() == id) {
+				System.out.println(m.toString());
+				return;
+			}
+		}
+		System.out.println("No items found.");
+	}
 
-    public Media searchCart(String title) {
-        for (Media media : itemsOrdered) {
-            if (media.isMatch(title)) {
-                return media;
-            }
-        }
-        System.out.println("Không tìm thấy!");
-        return null; // Trả về null nếu không tìm thấy
-    }
-    public void sortCartByTitle() {
-        Collections.sort(itemsOrdered, new MediaComparatorByTitleCost());
-        System.out.println("Giỏ hàng đã được sắp xếp theo tiêu đề.");
-    }
+	public void searchByTitle(String title) {
+		boolean found = false;
+		System.out.println("Search results for keywords: " + title);
+		for (Media m : itemsOrdered) {
+			if (m.isMatch(title)) {
+				System.out.println(m.toString());
+				found = true;
+			}
+		}
+		if (!found)
+			System.out.println("No items found.");
+	}
 
-    public void sortCartByCost() {
-        Collections.sort(itemsOrdered, new MediaComparatorByCostTitle());
-        System.out.println("Giỏ hàng đã được sắp xếp theo giá.");
-    }
+	public void sortByTitle() {
+		Collections.sort(itemsOrdered, Media.COMPARE_BY_TITLE_COST);
+	}
 
-    
-    
+	public void sortByCost() {
+		Collections.sort(itemsOrdered, Media.COMPARE_BY_COST_TITLE);
+	}
+
+	public Media fetchMedia(String title) {
+		for (Media m : itemsOrdered) {
+			if (m.isMatch(title))
+				return m;
+		}
+		return null;
+	}
+
+	public void placeOrder() {
+		itemsOrdered.clear();
+	}
+
+	public ObservableList<Media> getItemsOrdered() {
+		return itemsOrdered;
+	}
 }
+

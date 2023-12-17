@@ -3,51 +3,39 @@
  */
 package Media;
 
-public class Disc extends Media {
+public abstract class Disc extends Media {
 
-    private int length;
-    private String director;
+	protected int length;
+	protected String director;
 
-    public Disc() {
-        super(); 
-    }
-    
-    public Disc(String title) {
-    	super(title);
-    }
-    
-    public Disc(String title, String category, float cost, String director) {
-        super(title,category,cost);
-        this.director = director;
-    }
-    
-    public Disc(int id, String title, String category, float cost, String director) {
-        super(id,title,category,cost);
-        this.director = director;
-    }
+	public Disc() {
+		super();
+	}
 
-    public Disc(int id, String title, String category, float cost, String director, int length) {
-	    this(id, title, category, cost, director);
-    	this.length = length;
-    }
-  
-    public int getLength() {
-        return length;
-    }
+	public Disc(String title) {
+		super(title);
+	}
 
-    public String getDirector() {
-        return director;
-    }
+	public Disc(String title, String category, float cost) {
+		super(title, category, cost);
+	}
 
-	public void setLength(int length) {
+	public Disc(String title, String category, String director, float cost) {
+		this(title, category, cost);
+		this.director = director;
+	}
+
+	public Disc(String title, String category, String director, int length, float cost) {
+		this(title, category, director, cost);
 		this.length = length;
 	}
 
-	public void setDirector(String director) {
-		this.director = director;
+	public int getLength() {
+		return length;
 	}
-    
-    
 
+	public String getDirector() {
+		return director;
+	}
+	
 }
-

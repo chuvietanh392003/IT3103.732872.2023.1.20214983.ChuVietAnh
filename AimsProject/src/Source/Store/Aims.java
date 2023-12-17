@@ -1,402 +1,106 @@
-/**
- * Author: Chu Việt Anh
- */
 package Store;
 
 import java.util.Scanner;
+import javax.swing.JOptionPane;
 
 import Cart.Cart;
+import Exception.DuplicatedItemException;
 import Media.Book;
 import Media.CompactDisc;
 import Media.DigitalVideoDisc;
 import Media.Media;
-
-
+import Media.Track;
+import Screen.CartScreen;
+import Screen.StoreScreen;
 
 public class Aims {
+
+	private static Scanner sc;
+	private static Store store;
+	private static Cart cart;
+	private static StoreScreen storeScreen;
+	private static CartScreen cartScreen;
+
+	public static void main(String[] args) {
+		store = new Store();
+		cart = new Cart();
+		
+		/**
+		 * Author: Chu Việt Anh
+		 */
+
+		Media[] sampleMedia = new Media[] {
+				new DigitalVideoDisc("Journey To The Stars", "Sci-fi", "William Parker", 120, 35.7f),
+				new DigitalVideoDisc("Whispers Of Love", "Romance", "Eva Thompson", 105, 42.5f),
+				new DigitalVideoDisc("Dark Secrets", "Horror", "Robert Smith", 88, 52.1f),
+				new CompactDisc("Love Beats", "Pop", "Melissa Allen", "Brian Turner", 64.8f) {{
+				    addTrack(new Track("Dreamy Nights", 6));
+				    addTrack(new Track("Heartfelt Melodies", 4));
+				}},
+				new CompactDisc("Electric Dreamscape", "Electronic", "Catherine Simmons", "David Matthews", 78.5f) {{
+				    addTrack(new Track("Synth Reverie", 5));
+				    addTrack(new Track("Digital Escape", 3));
+				}},
+				new Book("Misty Mountains", "Mystery", 30.5f) {{
+				    addAuthor("David Johnson");
+				}},
+				new Book("Eternal Romance", "Romance", 45.6f) {{
+				    addAuthor("Olivia Miller");
+				    addAuthor("Christopher Davis");
+				}},
+				new CompactDisc("Pop Sensations", "Pop", "STEREO", "Melody Group", 25.5f) {{
+				    addTrack(new Track("Pop Anthem", 2));
+				    addTrack(new Track("Summer Vibes", 4));
+				}},
+				new Book("Dreams Unveiled", "Oneshot", 59.99f) {{
+				    addAuthor("Luna Taylor");
+				}}
+		};
+
+		
+		for (Media m : sampleMedia) {
+			try {
+				store.addMedia(m);
+			} catch (DuplicatedItemException e) {
+				JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+			}
+		}
+		
+		openStoreScreen();
+	}
+
+	public static Store getStore() {
+		return store;
+	}
+
+	public static Cart getCart() {
+		return cart;
+	}
+
+	public static StoreScreen getStoreScreen() {
+		return storeScreen;
+	}
+
+	public static CartScreen getCartScreen() {
+		return cartScreen;
+	}
 	
-    private static final Scanner scanner = new Scanner(System.in);
-    private Store store = new Store();
-    private Cart cart = new Cart();
-
-    public Aims() {
-    }
-
-    public Aims(Media... mediaList) {
-        for (Media media : mediaList)
-            store.addMedia(media);
-    }
-
-    static class ConsoleMenu {
-
-        public static int showMenu() {
-            System.out.println("AIMS ");
-            System.out.println("--------------------------------");
-            System.out.println("1. View store");
-            System.out.println("2. Update store");
-            System.out.println("3. See current cart");
-            System.out.println("0. Exit");
-            System.out.println("--------------------------------");
-            System.out.println("Please choose a number: 0-1-2-3");
-            return scanner.nextInt();
-        }
-
-        public static int storeMenu() {
-            System.out.println("Options:	 ");
-            System.out.println("--------------------------------");
-            System.out.println("1. See a media\'s details");
-            System.out.println("2. Add a media to cart");
-            System.out.println("3. Play a media");
-            System.out.println("4. See current cart");
-            System.out.println("0. Back");
-            System.out.println("--------------------------------");
-            System.out.println("Please choose a number: 0-1-2-3-4");
-            return scanner.nextInt();
-        }
-
-        public static int mediaDetails() {
-            System.out.println(" Options: ");
-            System.out.println("--------------------------------");
-            System.out.println("1. Add to cart");
-            System.out.println("2. Play");
-            System.out.println("0. Back");
-            System.out.println("--------------------------------");
-            System.out.println("Please choose a number: 0-1-2");
-            return scanner.nextInt();
-        }
-
-        public static int updateStore() {
-            System.out.println("\nUpdate store - Options: ");
-            System.out.println("--------------------------------");
-            System.out.println("1. Add a new item");
-            System.out.println("2. Remove an item");
-            System.out.println("0. Back");
-            System.out.println("--------------------------------");
-            System.out.println("Please choose a number: 0-1-2");
-            return scanner.nextInt();
-        }
-
-        public static int addNewMedia() {
-            System.out.println("\nAdd new media - Options: ");
-            System.out.println("--------------------------------");
-            System.out.println("1. Add a new book");
-            System.out.println("2. Add a new CD");
-            System.out.println("3. Add a new DVD");
-            System.out.println("0. Back");
-            System.out.println("--------------------------------");
-            System.out.println("Please choose a number: 0-1-2-3");
-            return scanner.nextInt();
-        }
-
-        public static int viewCart() {
-            System.out.println("\nView cart - Options: ");
-            System.out.println("--------------------------------");
-            System.out.println("1. Filter medias in cart");
-            System.out.println("2. Sort medias in cart");
-            System.out.println("3. Remove media from cart");
-            System.out.println("4. Play a media");
-            System.out.println("5. Place order");
-            System.out.println("0. Back");
-            System.out.println("--------------------------------");
-            System.out.println("Please choose a number: 0-1-2-3-4-5");
-            return scanner.nextInt();
-        }
-
-        public static int filterCart() {
-            System.out.println("\nFilter cart - Options: ");
-            System.out.println("--------------------------------");
-            System.out.println("1. Filter by id");
-            System.out.println("2. Filter by title");
-            System.out.println("0. Back");
-            System.out.println("--------------------------------");
-            System.out.println("Please choose a number: 0-1-2");
-            return scanner.nextInt();
-        }
-
-        public static int sortCart() {
-            System.out.println("\nSort cart - Options: ");
-            System.out.println("--------------------------------");
-            System.out.println("1. Sort by title");
-            System.out.println("2. Sort by cost");
-            System.out.println("0. Back");
-            System.out.println("--------------------------------");
-            System.out.println("Please choose a number: 0-1-2");
-            return scanner.nextInt();
-        }
-
-        public static int welcome() {
-            System.out.println("Welcome to AIMS!");
-            return showMenu();
-        }
-    }
-
-    public void start() {
-        while (true) {
-            int choice = ConsoleMenu.showMenu();
-            switch (choice) {
-                case 1:
-                    viewStore();
-                    break;
-                case 2:
-                    updateStore();
-                    break;
-                case 3:
-                    viewCart();
-                    break;
-                case 0:
-                    System.out.println("Goodbye!");
-                    return;
-                default:
-                    System.out.println("Invalid choice!");
-                    break;
-            }
-        }
-    }
-
-    private void viewStore() {
-        store.print();
-        while (true) {
-            switch (ConsoleMenu.storeMenu()) {
-                case 1: {
-                    System.out.println("Enter the title of media you want to search: ");
-                    scanner.nextLine();
-                    Media foundMedia = store.searchMedia(scanner.nextLine());
-                    if (foundMedia == null) {
-                        System.out.println("Media not found!");
-                    } else {
-                        foundMedia.printDetail();
-                        switch (ConsoleMenu.mediaDetails()) {
-                            case 1:
-                                if (!cart.addMedia(foundMedia))
-                                    System.out.println("The cart is full. Can't add more!");
-                                else
-                                    System.out.println("Added to cart successfully!");
-                                break;
-                            case 2:
-                                if (foundMedia instanceof DigitalVideoDisc) {
-                                    DigitalVideoDisc foundDisc = (DigitalVideoDisc) foundMedia;
-                                    foundDisc.play();
-                                } else {
-                                    System.out.println("Media is not DVD. Can't play!");
-                                }
-                                break;
-                            case 0:
-                                break;
-                            default:
-                                System.out.println("Invalid choice!");
-                                break;
-                        }
-                    }
-                }
-                    break;
-                case 2: {
-                    store.print();
-                    System.out.println("Enter the title of media you want to add to store: ");
-                    scanner.nextLine();
-                    Media foundMedia = store.searchMedia(scanner.nextLine());
-                    if (foundMedia == null) {
-                        System.out.println("Media not found!");
-                    } else {
-                        if (cart.addMedia(foundMedia))
-                            System.out.println("Added to cart successfully!");
-                        else
-                            System.out.println("The media is already in the store. Can't add!");
-                    }
-                }
-                    break;
-                case 3: {
-                    System.out.println("Enter the title of media you want to play: ");
-                    scanner.nextLine();
-                    Media foundMedia = store.searchMedia(scanner.nextLine());
-                    if (foundMedia == null) {
-                        System.out.println("Media not found!");
-                    } else if (foundMedia instanceof DigitalVideoDisc) {
-                        DigitalVideoDisc foundDisc = (DigitalVideoDisc) foundMedia;
-                        foundDisc.play();
-                    } else {
-                        System.out.println("Media is not DVD. Can't play!");
-                    }
-                }
-                    break;
-                case 4:
-                    cart.displayCart();
-                    break;
-                case 0:
-                    return;
-                default:
-                    System.out.println("Invalid choice!");
-                    break;
-            }
-        }
-    }
-
-    private void updateStore() {
-        while (true) {
-            switch (ConsoleMenu.updateStore()) {
-                case 1:
-                    switch (ConsoleMenu.addNewMedia()) {
-                        case 1: {
-                            System.out.println("Enter new book informations: ");
-                            System.out.println("Title: ");
-                            scanner.nextLine();
-                            String title = scanner.nextLine();
-                            System.out.println("Category: ");
-                            String category = scanner.nextLine();
-                            System.out.println("Cost: ");
-                            float cost = scanner.nextFloat();
-                            Book newBook = new Book(title,category,cost);
-                            store.addMedia(newBook);
-                        }
-                            break;
-                        case 2: {
-                            System.out.println("Enter new CD informations: ");
-                            System.out.println("Title: ");
-                            scanner.nextLine();
-                            String title = scanner.nextLine();
-                            System.out.println("Category: ");
-                            String category = scanner.nextLine();
-                            System.out.println("Cost: ");
-                            float cost = scanner.nextFloat();
-                            System.out.println("Director: ");
-                            scanner.nextLine();
-                            String director = scanner.nextLine();
-                            System.out.println("Artist: ");
-                            String artist = scanner.nextLine();
-                            CompactDisc newCD = new CompactDisc(artist,title,category,cost,director);
-                            store.addMedia(newCD);
-                        }
-                            break;
-                        case 3: {
-                            System.out.println("Enter new DVD informations: ");
-                            System.out.println("Title: ");
-                            scanner.nextLine();
-                            String title = scanner.nextLine();
-                            System.out.println("Category: ");
-                            String category = scanner.nextLine();
-                            System.out.println("Cost: ");
-                            float cost = scanner.nextFloat();
-                            System.out.println("Director: ");
-                            scanner.nextLine();
-                            String director = scanner.nextLine();
-                            System.out.println("Length: ");
-                            int length = scanner.nextInt();
-                            DigitalVideoDisc newDVD = new DigitalVideoDisc(title, category, cost, director,length);
-                            store.addMedia(newDVD);
-                        }
-                            break;
-                        case 0:
-                            break;
-                        default:
-                            System.out.println("Invalid choice!");
-                            break;
-                    }
-                    break;
-                case 2:
-                    store.print();
-                    System.out.println("Enter the title of media you want to delete: ");
-                    scanner.nextLine();
-                    Media foundMedia = store.searchMedia(scanner.nextLine());
-                    if (foundMedia == null)
-                        System.out.println("Media not found!");
-                    else {
-                        store.removeMedia(foundMedia);
-                        System.out.println("Deleted successfully!");
-                    }
-                    break;
-                case 0:
-                    return;
-                default:
-                    System.out.println("Invalid choice!");
-                    break;
-            }
-        }
-    }
-
-    private void viewCart() {
-        cart.displayCart();
-        while (true) {
-            switch (ConsoleMenu.viewCart()) {
-                case 1:
-                    switch (ConsoleMenu.filterCart()) {
-                        case 1: {
-                            System.out.println("Enter the id of media you want to filter: ");
-                            scanner.nextLine();
-                            Media mediaFound = cart.searchCart(scanner.nextInt());
-                            if (mediaFound == null)
-                                System.out.println("Media not found!");
-                            else
-                                System.out.println(mediaFound.toString());
-                        }
-                            break;
-                        case 2: {
-                            System.out.println("Enter the title of media you want to filter: ");
-                            scanner.nextLine();
-                            Media mediaFound = cart.searchCart(scanner.nextLine());
-                            if (mediaFound == null)
-                                System.out.println("Media not found!");
-                            else
-                                System.out.println(mediaFound.toString());
-                        }
-                            break;
-                        case 0:
-                            break;
-                        default:
-                            System.out.println("Invalid choice!");
-                            break;
-                    }
-                    break;
-                case 2:
-                    switch (ConsoleMenu.sortCart()) {
-                        case 1:
-                            cart.sortCartByTitle();
-                            cart.displayCart();
-                            break;
-                        case 2:
-                            cart.sortCartByCost();
-                            cart.displayCart();
-                            break;
-                        case 0:
-                            break;
-                        default:
-                            System.out.println("Invalid choice!");
-                            break;
-                    }
-                    break;
-                case 3: {
-                    System.out.println("Enter the title of media you want to delete: ");
-                    scanner.nextLine();
-                    Media foundMedia = cart.searchCart(scanner.nextLine());
-                    if (foundMedia == null)
-                        System.out.println("Media not found!");
-                    else {
-                        cart.removeMedia(foundMedia);
-                        System.out.println("Deleted successfully!");
-                    }
-                }
-                    break;
-                case 4:
-                    System.out.println("Enter the title of media you want to play: ");
-                    scanner.nextLine();
-                    Media foundMedia = cart.searchCart(scanner.nextLine());
-                    if (foundMedia == null) {
-                        System.out.println("Media not found!");
-                    } else if (foundMedia instanceof DigitalVideoDisc) {
-                        DigitalVideoDisc foundDisc = (DigitalVideoDisc) foundMedia;
-                        foundDisc.play();
-                    } else {
-                        System.out.println("Media is not DVD. Can't play!");
-                    }
-                    break;
-                case 5:
-                    System.out.println("Order is created!");
-                    cart = new Cart();
-                    break;
-                case 0:
-                    return;
-                default:
-                    System.out.println("Invalid choice!");
-                    break;
-            }
-        }
-    }
+	public static void openStoreScreen() {
+		storeScreen = new StoreScreen(store);
+	}
+	
+	public static void closeStoreScreen() {
+		storeScreen.setVisible(false);
+		storeScreen = null;
+	}
+	
+	public static void openCartScreen() {
+		cartScreen = new CartScreen(cart);
+	}
+	
+	public static void closeCartScreen() {
+		cartScreen.setVisible(false);
+		cartScreen = null;
+	}
+	
 }
